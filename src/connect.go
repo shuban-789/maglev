@@ -1,6 +1,5 @@
 package main
 
-func connect()
-{
+func connect() {
 	
 }
