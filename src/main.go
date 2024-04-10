@@ -2,7 +2,6 @@ package main
 
 // TODO: Stitch listen.go
 
-func main()
-{
+func main() {
 	
 }
