@@ -40,7 +40,8 @@ func spawnShell(conn net.Conn)
 		// TODO: Finish execution using bash -c chain
 		input := make([]byte, 1024)
 		_, err := conn.Read(input)
-		if handleError(err) == 1 {
+		if handleError(err) == 1 
+		{
 			fmt.Printf("❌ Error reading input from client: %v\n", err)
 			return
 		}
