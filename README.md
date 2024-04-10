@@ -5,4 +5,5 @@ Simple Goals
 - [ ] Rich prompt code
 - [ ] Client code
 - [ ] Integration into one command
+- [ ] Maximize capabilities
 - [ ] Configure dependency management
