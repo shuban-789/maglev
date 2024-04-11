@@ -1,3 +1,4 @@
+# Just a template as of now
 FROM golang:1.19
 
 WORKDIR /app
