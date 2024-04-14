@@ -63,6 +63,6 @@ func listen(PORT) {
 		} else {
 			fmt.Printf("\n✅ Connection established")
 		}
-	go spawnshell(con)
+	go spawnShell(con)
 	}
 }
