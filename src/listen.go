@@ -1,13 +1,10 @@
 package main
 
-import 
-(
-"fmt"
-"net"
-"os"
-"os/exec"
-"syscall"
-)
+import "fmt"
+import "net"
+import "os"
+import "os/exec"
+import "syscall"
 
 func handleError(err error) int {
 	if err != nil {
