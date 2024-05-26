@@ -71,7 +71,7 @@ func listen(PORT string, PROTOCOL string) {
 		fmt.Printf("\n🔴 [ERROR] Unable to listen on specified port: %v", err)
 		return
 	} else {
-		fmt.Printf("🟡 Listening on port %s (%s)", PORT, PROTOCOL)
+		fmt.Printf("🟡 [IDLE] Listening on port %s (%s)", PORT, PROTOCOL)
 	}
 
 	for {
@@ -79,7 +79,7 @@ func listen(PORT string, PROTOCOL string) {
 		if handleError(err) == 1 {
 			fmt.Printf("\n🔴 [ERROR] Unable to establish connection: %v", err)
 		} else {
-			fmt.Printf("\n🟢 Connection established")
+			fmt.Printf("\n🟢 [SUCCESS] Connection established")
 		}
 		go spawnShell(conn)
 	}
