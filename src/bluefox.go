@@ -38,7 +38,7 @@ func spawnShell(conn net.Conn) {
 		return
 	}
 
-	fmt.Printf("\n🟢 Received connection from %v", conn.RemoteAddr().String())
+	fmt.Printf("\n🟢 Recieved connection from %v", conn.RemoteAddr().String())
 	conn.Write([]byte("🦊 Connection established!\n"))
 
 	for {
@@ -66,7 +66,7 @@ func listen(PORT string, PROTOCOL string) {
 		fmt.Printf("\n❌ An error has occurred with listening: %v", err)
 		return
 	} else {
-		fmt.Printf("🟡 Listening on %s:%s...", PROTOCOL, PORT)
+		fmt.Printf("🟡 Listening on port %s (%s)", PORT, PROTOCOL)
 	}
 
 	for {
