@@ -16,7 +16,7 @@ const PROTOCOL = "tcp"
 
 func handleError(err error) int {
 	if err != nil {
-		fmt.Printf("❌ Error: %v\n", err)
+		fmt.Printf("\n🔴 Error: %v", err)
 		return 1
 	}
 	return 0
@@ -39,7 +39,7 @@ func spawnShell(conn net.Conn) {
 	}
 
 	fmt.Printf("\n🟢 Received connection from %v", conn.RemoteAddr().String())
-	conn.Write([]byte("\n🦊 Connection established!"))
+	conn.Write([]byte("🦊 Connection established!\n"))
 
 	for {
 		prompt := fmt.Sprintf("%s@%s:%s$ ", username, hostname, getUpdatedDirectory())
@@ -47,7 +47,7 @@ func spawnShell(conn net.Conn) {
 		input := make([]byte, 1024)
 		n, err := conn.Read(input)
 		if handleError(err) == 1 {
-			fmt.Printf("\n🔴 Error reading input from client: %v\n", err)
+			fmt.Printf("\n🔴 Error reading input from client: %v", err)
 			return
 		}
 
@@ -66,7 +66,7 @@ func listen(PORT string, PROTOCOL string) {
 		fmt.Printf("\n❌ An error has occurred with listening: %v", err)
 		return
 	} else {
-		fmt.Printf("\n🟡 Listening on %s:%s...", PROTOCOL, PORT)
+		fmt.Printf("🟡 Listening on %s:%s...", PROTOCOL, PORT)
 	}
 
 	for {
