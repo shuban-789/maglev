@@ -62,7 +62,7 @@ func spawnShell(conn net.Conn) {
 func listen(PORT string, PROTOCOL string) {
 	ln, err := net.Listen(PROTOCOL, ":"+PORT)
 	if handleError(err) == 1 {
-		fmt.Printf("\n❌ An error has occurred with listening: %v", err)
+		fmt.Printf("\n🔴 Error occurred with listening: %v", err)
 		return
 	} else {
 		fmt.Printf("🟡 Listening on port %s (%s)", PORT, PROTOCOL)
@@ -71,7 +71,7 @@ func listen(PORT string, PROTOCOL string) {
 	for {
 		conn, err := ln.Accept()
 		if handleError(err) == 1 {
-			fmt.Printf("\n🔴 Error during an attempted connection: %v", err)
+			fmt.Printf("\n🔴 Error occured with connection attempt: %v", err)
 		} else {
 			fmt.Printf("\n🟢 Connection established")
 		}
