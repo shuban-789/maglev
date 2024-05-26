@@ -77,7 +77,7 @@ func listen(PORT string, PROTOCOL string) {
 	for {
 		conn, err := ln.Accept()
 		if handleError(err) == 1 {
-			fmt.Printf("\n🔴 [ERROR] : %v", err)
+			fmt.Printf("\n🔴 [ERROR] Unable to establish connection: %v", err)
 		} else {
 			fmt.Printf("\n🟢 Connection established")
 		}
