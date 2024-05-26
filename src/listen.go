@@ -75,4 +75,6 @@ func listen(PORT string, PROTOCOL string) {
 	}
 }
 
-listen(PORT, PROTOCOL)
+func main() {
+	listen(PORT, PROTOCOL)
+|
