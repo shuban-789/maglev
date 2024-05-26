@@ -16,7 +16,6 @@ const PROTOCOL = "tcp"
 
 func handleError(err error) int {
 	if err != nil {
-		fmt.Printf("\n🔴 Error: %v", err)
 		return 1
 	}
 	return 0
