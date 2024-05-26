@@ -9,6 +9,11 @@ import "os/user"
 const PORT = "6553"
 const PROTOCOL = "tcp"
 
+// type connection struct {
+//	 protocol string
+//	 port int
+// }
+
 func handleError(err error) int {
 	if err != nil {
 		fmt.Printf("❌ Error: %v\n", err)
