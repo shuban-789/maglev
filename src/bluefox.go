@@ -38,8 +38,8 @@ func spawnShell(conn net.Conn) {
 		return
 	}
 
-	fmt.Printf("\n✅ Received connection from %v\n", conn.RemoteAddr().String())
-	conn.Write([]byte("✅ Connection established!\n"))
+	fmt.Printf("\n🟢 Received connection from %v", conn.RemoteAddr().String())
+	conn.Write([]byte("\n🦊 Connection established!"))
 
 	for {
 		prompt := fmt.Sprintf("%s@%s:%s$ ", username, hostname, getUpdatedDirectory())
@@ -47,7 +47,7 @@ func spawnShell(conn net.Conn) {
 		input := make([]byte, 1024)
 		n, err := conn.Read(input)
 		if handleError(err) == 1 {
-			fmt.Printf("❌ Error reading input from client: %v\n", err)
+			fmt.Printf("\n🔴 Error reading input from client: %v\n", err)
 			return
 		}
 
@@ -55,7 +55,7 @@ func spawnShell(conn net.Conn) {
 		cmd.Stdout = conn
 		cmd.Stderr = conn
 		if err := cmd.Run(); handleError(err) == 1 {
-			fmt.Fprintf(conn, "❌ Error executing command: %v\n", err)
+			fmt.Fprintf(conn, "\n🔴 Error executing command: %v", err)
 		}
 	}
 }
@@ -63,18 +63,18 @@ func spawnShell(conn net.Conn) {
 func listen(PORT string, PROTOCOL string) {
 	ln, err := net.Listen(PROTOCOL, ":"+PORT)
 	if handleError(err) == 1 {
-		fmt.Printf("❌ An error has occurred with listening: %v\n", err)
+		fmt.Printf("\n❌ An error has occurred with listening: %v", err)
 		return
 	} else {
-		fmt.Printf("\n Listening on port %s...\n", PORT)
+		fmt.Printf("\n🟡 Listening on %s:%s...", PROTOCOL, PORT)
 	}
 
 	for {
 		conn, err := ln.Accept()
 		if handleError(err) == 1 {
-			fmt.Printf("❌ An error occurred during an attempted connection: %v\n", err)
+			fmt.Printf("\n🔴 An error occurred during an attempted connection: %v", err)
 		} else {
-			fmt.Printf("\n✅ Connection established\n")
+			fmt.Printf("\n🟢 Connection established")
 		}
 		go spawnShell(conn)
 	}
