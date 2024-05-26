@@ -24,8 +24,7 @@ func handleError(err error) int {
 func getUpdatedDirectory() string {
 	cwd, err := os.Getwd()
 	if handleError(err) == 1 {
-		fmt.Fprintf(conn, "\n🔴 [ERROR] Unable to update directory on prompt: %v", err)
-		return
+		fmt.Printf("\n🔴 [ERROR] Unable to update directory on prompt: %v", err)
 	}
 	return cwd
 }
