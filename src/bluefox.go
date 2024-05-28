@@ -6,6 +6,7 @@ import "os"
 import "os/exec"
 import "os/user"
 import "strings"
+import "bufio"
 
 func handleError(err error) int {
 	if err != nil {
@@ -104,11 +105,43 @@ func listen(PORT string) {
 }
 
 func connect(IP string, PORT string) {
-	conn, err := net.Dial("tcp", IP+":"+PORT)
-	if handleError(err) == 1 {
-		fmt.Printf("🔴 [ERROR] Unable to connect to %v on poirt %v: %v\n", IP, PORT, err)
-	}
-	defer conn.Close()
+    conn, err := net.Dial("tcp", IP+":"+PORT)
+    if handleError(err) == 1 {
+        fmt.Printf("🔴 [ERROR] Unable to connect to %v on port %v: %v\n", IP, PORT, err)
+        return
+    }
+    defer conn.Close()
+
+    reader := bufio.NewReader(os.Stdin)
+    serverReader := bufio.NewReader(conn)
+
+    for {
+        prompt, err := serverReader.ReadString('$')
+        if handleError(err) == 1 {
+            fmt.Printf("🔴 [ERROR] Could not read server prompt: %v\n", err)
+            return
+        }
+
+		prompt += string(' ')
+        fmt.Print(prompt)
+
+        input, err := reader.ReadString('\n')
+        if handleError(err) == 1 {
+            fmt.Printf("🔴 [ERROR] Could not read input: %v\n", err)
+            continue
+        }
+
+        input = strings.TrimSpace(input)
+        if input == "exit" {
+            return
+        }
+
+        _, err = conn.Write([]byte(input + "\n"))
+        if handleError(err) == 1 {
+            fmt.Printf("🔴 [ERROR] Could not send command: %v\n", err)
+            continue
+        }
+    }
 }
 
 func help() {
