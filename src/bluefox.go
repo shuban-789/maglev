@@ -103,6 +103,46 @@ func listen(PORT string) {
 	}
 }
 
+func connect(IP string, PORT string) {
+	conn, err := net.Dial("tcp", IP+":"+PORT)
+	if handleError(err) == 1 {
+		fmt.Printf("🔴 [ERROR] Unable to connect to %v on poirt %v: %v\n", IP, PORT, err)
+	}
+	defer conn.Close()
+}
+
+func help() {
+	fmt.Printf("Usage: ./bluefox [OPTION] [ARGUMENT]\n")
+	fmt.Printf("\nOptions:\n")
+	fmt.Printf("	-h, Shows help menu for this command\n")
+	fmt.Printf("	-l, Sets up listener for a specified port\n")
+	fmt.Printf("	-c, Connects to a server based on a specified address and port\n")
+	fmt.Printf("\nFormat:\n")
+	fmt.Printf("	./bluefox -h\n")
+	fmt.Printf("	./bluefox -l <PORT>\n")
+	fmt.Printf("	./bluefox -c <IP> <PORT>\n")
+	fmt.Printf("\nExamples:\n")
+	fmt.Printf("	./bluefox -l 1234\n")
+	fmt.Printf("	./bluefox -c 127.0.0.1 1234\n")
+}
+
 func main() {
-	listen("6553")
+	if len(os.Args) > 1 {
+		if strings.Compare(os.Args[1], "-l") == 0 {
+			listen(os.Args[2])
+		} else if strings.Compare(os.Args[1], "-c") == 0 {
+			var ipAddr string
+			if strings.Compare(os.Args[2], "localhost") == 0 {
+				ipAddr = "127.0.0.1"
+			} else {
+				ipAddr = os.Args[2]
+			}
+			Port := os.Args[3]
+			connect(ipAddr, Port)
+		} else if strings.Compare(os.Args[1], "-h") == 0 {
+			help()
+		}
+	} else {
+		help()
+	}
 }
