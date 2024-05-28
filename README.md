@@ -1,11 +1,21 @@
-## A Work in Progress
+# Usage
 
-Simple Goals
-- [x] Listener code
-- [ ] Rich prompt code
-- [ ] Client code
-- [ ] Integration into one command
-- [ ] Maximize capabilities
-- [ ] Configure dependency management
+```
+Usage: ./bluefox [OPTION] [ARGUMENT]
 
-Currently in: Test state for listener
+Options:
+        -h, Shows help menu for this command
+        -l, Sets up listener for a specified port
+        -c, Connects to a server based on a specified address and port
+
+Format:
+        ./bluefox -h
+        ./bluefox -l <PORT>
+        ./bluefox -c <IP> <PORT>
+
+Examples:
+        ./bluefox -l 1234
+        ./bluefox -c 127.0.0.1 123
+```
+
+# ⚙️Currently a Work in Progress
