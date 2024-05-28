@@ -17,5 +17,3 @@ Examples:
         ./bluefox -l 1234
         ./bluefox -c 127.0.0.1 123
 ```
-
-# ⚙️Currently a Work in Progress
