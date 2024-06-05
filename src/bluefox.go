@@ -1,12 +1,14 @@
 package main
 
-import "fmt"
-import "net"
-import "os"
-import "os/exec"
-import "os/user"
-import "strings"
-import "bufio"
+import (
+	"fmt"
+	"net"
+	"os"
+	"os/exec"
+	"os/user"
+	"strings"
+	"bufio"
+)
 
 func handleError(err error) int {
 	if err != nil {
