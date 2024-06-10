@@ -6,7 +6,7 @@ Usage: ./bluefox [OPTION1] [ARGUMENT1] ... [OPTIONn] [ARGUMENTn]
 Options:
         -h, Shows help menu for this command
         -l, Sets up listener for a specified port
-                --shell, spawns a specified shell supporting the -c argument
+                --shell, spawns a specified shell
         -c, Connects to a server based on a specified address and port
 
 Format:
