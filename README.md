@@ -20,3 +20,8 @@ Examples:
         ./bluefox -l 1234 --shell /usr/bin/python3
         ./bluefox -c 127.0.0.1 1234
 ```
+
+# What to Expect
+
+- More features
+- Formatting improvements in source code
