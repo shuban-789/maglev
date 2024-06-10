@@ -1,3 +1,3 @@
-module src/bluefox.go
+module bluefox.go
 
 go 1.22.3
