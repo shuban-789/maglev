@@ -8,6 +8,7 @@ import (
 	"os/user"
 	"strings"
 	"bufio"
+	"bytes"
 )
 
 func handleError(err error) int {
@@ -35,6 +36,10 @@ func spawnShell(conn net.Conn, shell string) {
 
 	fmt.Printf("🟢 [SUCCESS] Received connection from %v\n", ip)
 	conn.Write([]byte("🦊 Connection established!\n"))
+	conn.Write([]byte("⚙️ SHELL: " + shell + "\n"))
+	conn.Write([]byte("⚙️ USER: " + username + "\n"))
+	conn.Write([]byte("⚙️ HOSTNAME: " + hostname + "\n"))
+
 
 	dir, err := os.Getwd()
 	if handleError(err) == 1 {
@@ -65,6 +70,7 @@ func spawnShell(conn net.Conn, shell string) {
 			err := os.Chdir(path)
 			if handleError(err) == 1 {
 				fmt.Fprintf(conn, "🔴 [ERROR] Unable to change directory: %v\n", err)
+				fmt.Printf("🔴 [ERROR] Client is unnable to change directory: %v\n", err)
 			} else {
 				dir, _ = os.Getwd()
 			}
@@ -82,6 +88,7 @@ func spawnShell(conn net.Conn, shell string) {
 		cmd.Stderr = conn
 		if err := cmd.Run(); handleError(err) == 1 {
 			fmt.Fprintf(conn, "🔴 [ERROR] Unable to execute commands: %v\n", err)
+			fmt.Printf("🔴 [ERROR] Client is unnable to execute commands: %v\n", err)
 		}
 	}
 }
@@ -162,18 +169,8 @@ func connect(IP string, PORT string) {
 	defer conn.Close()
 
 	reader := bufio.NewReader(os.Stdin)
-	serverReader := bufio.NewReader(conn)
 
 	for {
-		prompt, err := serverReader.ReadString('$')
-		if handleError(err) == 1 {
-			fmt.Printf("🔴 [ERROR] Could not read server prompt: %v\n", err)
-			return
-		}
-
-		prompt += string(' ')
-		fmt.Print(prompt)
-
 		input, err := reader.ReadString('\n')
 		if handleError(err) == 1 {
 			fmt.Printf("🔴 [ERROR] Could not read input: %v\n", err)
@@ -189,6 +186,35 @@ func connect(IP string, PORT string) {
 		if handleError(err) == 1 {
 			fmt.Printf("🔴 [ERROR] Could not send command: %v\n", err)
 			continue
+		}
+	}
+}
+
+func serviceList() {
+	cmd := exec.Command("systemctl", "list-units", "--type=service", "--all", "--no-pager", "--no-legend")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	if err != nil {
+		fmt.Printf("Error executing systemctl: %v\n", err)
+		return
+	}
+
+	lines := strings.Split(out.String(), "\n")
+
+	fmt.Printf("%-50s %-10s\n", "SERVICE NAME", "STATUS")
+	fmt.Println(strings.Repeat("-", 60))
+
+	for _, line := range lines {
+		fields := strings.Fields(line)
+		if len(fields) >= 4 {
+			serviceName := fields[0]
+			serviceStatus := fields[3]
+			status := "🔴 Offline"
+			if serviceStatus == "running" {
+				status = "🟢 Online"
+			}
+			fmt.Printf("%-50s %-10s\n", serviceName, status)
 		}
 	}
 }
@@ -229,6 +255,9 @@ func main() {
 			}
 			Port := os.Args[3]
 			connect(ipAddr, Port)
+		} else if strings.Compare(os.Args[1], "-s") == 0 {
+			serviceList()
+			// TODO: make service list but for all tcp processes
 		} else if strings.Compare(os.Args[1], "-h") == 0 {
 			help()
 		}
