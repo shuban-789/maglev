@@ -9,6 +9,7 @@ import (
 	"strings"
 	"bufio"
 	"bytes"
+	"strconv"
 )
 
 func handleError(err error) int {
@@ -28,8 +29,10 @@ func spawnShell(conn net.Conn, shell string) {
 		fmt.Fprintf(conn, "🔴 [ERROR] Unable to get current user: %v\n", err)
 		return
 	}
+
 	username := currentUser.Username
 	hostname, err := os.Hostname()
+
 	if handleError(err) == 1 {
 		return
 	}
@@ -39,7 +42,6 @@ func spawnShell(conn net.Conn, shell string) {
 	conn.Write([]byte("⚙️ SHELL: " + shell + "\n"))
 	conn.Write([]byte("⚙️ USER: " + username + "\n"))
 	conn.Write([]byte("⚙️ HOSTNAME: " + hostname + "\n"))
-
 
 	dir, err := os.Getwd()
 	if handleError(err) == 1 {
@@ -52,6 +54,7 @@ func spawnShell(conn net.Conn, shell string) {
 		conn.Write([]byte(prompt))
 		input := make([]byte, 1024)
 		n, err := conn.Read(input)
+
 		if handleError(err) == 1 {
 			fmt.Printf("🔴 [ERROR] Could not read input from client: %v\n", err)
 			return
@@ -160,61 +163,134 @@ func listen(PORT string) {
 	}
 }
 
-func connect(IP string, PORT string) {
+func connectPayloadFile(IP string, PORT string) {
 	conn, err := net.Dial("tcp", IP+":"+PORT)
-	if handleError(err) == 1 {
+	if err != nil {
 		fmt.Printf("🔴 [ERROR] Unable to connect to %v on port %v: %v\n", IP, PORT, err)
 		return
 	}
 	defer conn.Close()
 
-	reader := bufio.NewReader(os.Stdin)
+	fmt.Printf("🟢 [CONNECTED] Connected to %v on port %v\n", IP, PORT)
 
+	go func() {
+		reader := bufio.NewReader(conn)
+		for {
+			message, err := reader.ReadString('\n')
+			if err != nil {
+				fmt.Printf("🔴 [ERROR] Failed to read message: %v\n", err)
+				return
+			}
+			fmt.Printf("🟡 [RECEIVED] %s", message)
+		}
+	}()
+
+	reader := bufio.NewReader(os.Stdin)
 	for {
 		input, err := reader.ReadString('\n')
-		if handleError(err) == 1 {
+		if err != nil {
 			fmt.Printf("🔴 [ERROR] Could not read input: %v\n", err)
 			continue
 		}
 
 		input = strings.TrimSpace(input)
 		if input == "exit" {
+			fmt.Printf("🟢 [SUCCESS] Client has disconnected")
 			return
 		}
 
 		_, err = conn.Write([]byte(input + "\n"))
-		if handleError(err) == 1 {
-			fmt.Printf("🔴 [ERROR] Could not send command: %v\n", err)
+		if err != nil {
+			fmt.Printf("🔴 [ERROR] Could not send input: %v\n", err)
 			continue
 		}
 	}
 }
 
-func serviceList() {
-	cmd := exec.Command("systemctl", "list-units", "--type=service", "--all", "--no-pager", "--no-legend")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err := cmd.Run()
+func connectPayload(IP string, PORT string) {
+	conn, err := net.Dial("tcp", IP+":"+PORT)
 	if err != nil {
-		fmt.Printf("Error executing systemctl: %v\n", err)
+		fmt.Printf("🔴 [ERROR] Unable to connect to %v on port %v: %v\n", IP, PORT, err)
 		return
 	}
+	defer conn.Close()
 
-	lines := strings.Split(out.String(), "\n")
+	fmt.Printf("🟢 [CONNECTED] Connected to %v on port %v\n", IP, PORT)
 
-	fmt.Printf("%-50s %-10s\n", "SERVICE NAME", "STATUS")
-	fmt.Println(strings.Repeat("-", 60))
-
-	for _, line := range lines {
-		fields := strings.Fields(line)
-		if len(fields) >= 4 {
-			serviceName := fields[0]
-			serviceStatus := fields[3]
-			status := "🔴 Offline"
-			if serviceStatus == "running" {
-				status = "🟢 Online"
+	go func() {
+		reader := bufio.NewReader(conn)
+		for {
+			message, err := reader.ReadString('\n')
+			if err != nil {
+				fmt.Printf("🔴 [ERROR] Failed to read message: %v\n", err)
+				return
 			}
-			fmt.Printf("%-50s %-10s\n", serviceName, status)
+			fmt.Printf("🟡 [RECEIVED] %s", message)
+		}
+	}()
+
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Printf("🔴 [ERROR] Could not read input: %v\n", err)
+			continue
+		}
+
+		input = strings.TrimSpace(input)
+		if input == "exit" {
+			fmt.Printf("🟢 [SUCCESS] Client has disconnected")
+			return
+		}
+
+		_, err = conn.Write([]byte(input + "\n"))
+		if err != nil {
+			fmt.Printf("🔴 [ERROR] Could not send input: %v\n", err)
+			continue
+		}
+	}
+}
+
+func connect(IP string, PORT string) {
+	conn, err := net.Dial("tcp", IP+":"+PORT)
+	if err != nil {
+		fmt.Printf("🔴 [ERROR] Unable to connect to %v on port %v: %v\n", IP, PORT, err)
+		return
+	}
+	defer conn.Close()
+
+	fmt.Printf("🟢 [CONNECTED] Connected to %v on port %v\n", IP, PORT)
+
+	go func() {
+		reader := bufio.NewReader(conn)
+		for {
+			message, err := reader.ReadString('\n')
+			if err != nil {
+				fmt.Printf("🔴 [ERROR] Failed to read message: %v\n", err)
+				return
+			}
+			fmt.Printf("🟡 [RECEIVED] %s", message)
+		}
+	}()
+
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Printf("🔴 [ERROR] Could not read input: %v\n", err)
+			continue
+		}
+
+		input = strings.TrimSpace(input)
+		if input == "exit" {
+			fmt.Printf("🟢 [SUCCESS] Client has disconnected")
+			return
+		}
+
+		_, err = conn.Write([]byte(input + "\n"))
+		if err != nil {
+			fmt.Printf("🔴 [ERROR] Could not send input: %v\n", err)
+			continue
 		}
 	}
 }
@@ -225,7 +301,7 @@ func help() {
 	fmt.Printf("	-h, Shows help menu for this command\n")
 	fmt.Printf("	-l, Sets up listener for a specified port\n")
 	fmt.Printf("		--shell, spawns a specified shell supporting the -c argument\n")
-	fmt.Printf("	-c, Connects to a server based on a specified address and port\n")
+	fmt.Printf("	-c, Connects to a device based on a specified address and port\n")
 	fmt.Printf("\nFormat:\n")
 	fmt.Printf("	./bluefox -h\n")
 	fmt.Printf("	./bluefox -l <PORT>\n")
@@ -246,18 +322,20 @@ func main() {
 			} else {
 				listen(os.Args[2])
 			}
-		} else if strings.Compare(os.Args[1], "-c") == 0 {
-			var ipAddr string
-			if strings.Compare(os.Args[2], "localhost") == 0 {
-				ipAddr = "127.0.0.1"
+		} else if len(os.Args) > 2 && strings.Compare(os.Args[1], "-c") == 0 {
+			if len(os.Args) > 3 && strings.Compare(os.Args[3], "--payload") == 0 {
+				shell := os.Args[4]
+				listenShell(os.Args[2], shell)
 			} else {
-				ipAddr = os.Args[2]
+				var ipAddr string
+				if strings.Compare(os.Args[2], "localhost") == 0 {
+					ipAddr = "127.0.0.1"
+				} else {
+					ipAddr = os.Args[2]
+				}
+				Port := os.Args[3]
+				connect(ipAddr, Port)
 			}
-			Port := os.Args[3]
-			connect(ipAddr, Port)
-		} else if strings.Compare(os.Args[1], "-s") == 0 {
-			serviceList()
-			// TODO: make service list but for all tcp processes
 		} else if strings.Compare(os.Args[1], "-h") == 0 {
 			help()
 		}
