@@ -8,9 +8,12 @@ import (
 	"os/user"
 	"strings"
 	"bufio"
-	"bytes"
-	"strconv"
 )
+
+type File struct {
+	name string
+	rwx string
+}
 
 func handleError(err error) int {
 	if err != nil {
@@ -163,7 +166,7 @@ func listen(PORT string) {
 	}
 }
 
-func connectPayloadFile(IP string, PORT string) {
+func connectPayload(IP string, PORT string, payload string) {
 	conn, err := net.Dial("tcp", IP+":"+PORT)
 	if err != nil {
 		fmt.Printf("🔴 [ERROR] Unable to connect to %v on port %v: %v\n", IP, PORT, err)
@@ -171,81 +174,28 @@ func connectPayloadFile(IP string, PORT string) {
 	}
 	defer conn.Close()
 
-	fmt.Printf("🟢 [CONNECTED] Connected to %v on port %v\n", IP, PORT)
+	fmt.Printf("🟢 [SUCCESS] Successfully connected to %v on port %v\n", IP, PORT)
 
 	go func() {
 		reader := bufio.NewReader(conn)
 		for {
-			message, err := reader.ReadString('\n')
+			message, err := reader.ReadString(' ')
 			if err != nil {
 				fmt.Printf("🔴 [ERROR] Failed to read message: %v\n", err)
 				return
 			}
-			fmt.Printf("🟡 [RECEIVED] %s", message)
+			fmt.Printf(message)
 		}
 	}()
 
-	reader := bufio.NewReader(os.Stdin)
+	deployment := 0
 	for {
-		input, err := reader.ReadString('\n')
+		if deployment != 1 {
+			_, err = conn.Write([]byte(payload + "\n"))
+			deployment = 1
+		}
 		if err != nil {
-			fmt.Printf("🔴 [ERROR] Could not read input: %v\n", err)
-			continue
-		}
-
-		input = strings.TrimSpace(input)
-		if input == "exit" {
-			fmt.Printf("🟢 [SUCCESS] Client has disconnected")
-			return
-		}
-
-		_, err = conn.Write([]byte(input + "\n"))
-		if err != nil {
-			fmt.Printf("🔴 [ERROR] Could not send input: %v\n", err)
-			continue
-		}
-	}
-}
-
-func connectPayload(IP string, PORT string) {
-	conn, err := net.Dial("tcp", IP+":"+PORT)
-	if err != nil {
-		fmt.Printf("🔴 [ERROR] Unable to connect to %v on port %v: %v\n", IP, PORT, err)
-		return
-	}
-	defer conn.Close()
-
-	fmt.Printf("🟢 [CONNECTED] Connected to %v on port %v\n", IP, PORT)
-
-	go func() {
-		reader := bufio.NewReader(conn)
-		for {
-			message, err := reader.ReadString('\n')
-			if err != nil {
-				fmt.Printf("🔴 [ERROR] Failed to read message: %v\n", err)
-				return
-			}
-			fmt.Printf("🟡 [RECEIVED] %s", message)
-		}
-	}()
-
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		input, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Printf("🔴 [ERROR] Could not read input: %v\n", err)
-			continue
-		}
-
-		input = strings.TrimSpace(input)
-		if input == "exit" {
-			fmt.Printf("🟢 [SUCCESS] Client has disconnected")
-			return
-		}
-
-		_, err = conn.Write([]byte(input + "\n"))
-		if err != nil {
-			fmt.Printf("🔴 [ERROR] Could not send input: %v\n", err)
+			fmt.Printf("🔴 [ERROR] Could not send payload: %v\n", err)
 			continue
 		}
 	}
@@ -259,17 +209,17 @@ func connect(IP string, PORT string) {
 	}
 	defer conn.Close()
 
-	fmt.Printf("🟢 [CONNECTED] Connected to %v on port %v\n", IP, PORT)
+	fmt.Printf("🟢 [SUCCESS] Successfully connected to %v on port %v\n", IP, PORT)
 
 	go func() {
 		reader := bufio.NewReader(conn)
 		for {
-			message, err := reader.ReadString('\n')
+			message, err := reader.ReadString(' ')
 			if err != nil {
 				fmt.Printf("🔴 [ERROR] Failed to read message: %v\n", err)
 				return
 			}
-			fmt.Printf("🟡 [RECEIVED] %s", message)
+			fmt.Printf(message)
 		}
 	}()
 
@@ -323,9 +273,16 @@ func main() {
 				listen(os.Args[2])
 			}
 		} else if len(os.Args) > 2 && strings.Compare(os.Args[1], "-c") == 0 {
-			if len(os.Args) > 3 && strings.Compare(os.Args[3], "--payload") == 0 {
-				shell := os.Args[4]
-				listenShell(os.Args[2], shell)
+			if len(os.Args) > 3 && strings.Compare(os.Args[4], "--payload") == 0 {
+				payload := os.Args[5]
+				var ipAddr string
+				if strings.Compare(os.Args[2], "localhost") == 0 {
+					ipAddr = "127.0.0.1"
+				} else {
+					ipAddr = os.Args[2]
+				}
+				Port := os.Args[3]
+				connectPayload(ipAddr, Port, payload)
 			} else {
 				var ipAddr string
 				if strings.Compare(os.Args[2], "localhost") == 0 {
