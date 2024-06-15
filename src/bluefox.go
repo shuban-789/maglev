@@ -10,11 +10,6 @@ import (
 	"bufio"
 )
 
-type File struct {
-	name string
-	rwx string
-}
-
 func handleError(err error) int {
 	if err != nil {
 		return 1
@@ -252,6 +247,7 @@ func help() {
 	fmt.Printf("	-l, Sets up listener for a specified port\n")
 	fmt.Printf("		--shell, spawns a specified shell supporting the -c argument\n")
 	fmt.Printf("	-c, Connects to a device based on a specified address and port\n")
+	fmt.Printf("		--payload, spawns a specified shell supporting the -c argument\n")
 	fmt.Printf("\nFormat:\n")
 	fmt.Printf("	./bluefox -h\n")
 	fmt.Printf("	./bluefox -l <PORT>\n")
