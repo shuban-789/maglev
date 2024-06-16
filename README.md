@@ -1,7 +1,7 @@
 # Usage
 
 ```
-Usage: ./gocat [OPTION1] [ARGUMENT1] ... [OPTIONn] [ARGUMENTn]
+Usage: ./bluefox [OPTION1] [ARGUMENT1] ... [OPTIONn] [ARGUMENTn]
 
 Options:
         -h, Shows help menu for this command
@@ -11,14 +11,14 @@ Options:
                 --payload, spawns a specified shell supporting the -c argument
 
 Format:
-        ./gocat -h
-        ./gocat -l <PORT>
-        ./gocat -l <PORT> --shell <SHELL>
-        ./gocat -c <IP> <PORT>
+        ./bluefox -h
+        ./bluefox -l <PORT>
+        ./bluefox -l <PORT> --shell <SHELL>
+        ./bluefox -c <IP> <PORT>
 
 Examples:
-        ./gocat -l 1234
-        ./gocat -l 1234 --shell /usr/bin/python3
-        ./gocat -c 127.0.0.1 1234
-        ./gocat -c 127.0.0.1 1234 --payload "ls -l"
+        ./bluefox -l 1234
+        ./bluefox -l 1234 --shell /usr/bin/python3
+        ./bluefox -c 127.0.0.1 1234
+        ./bluefox -c 127.0.0.1 1234 --payload "ls -l"
 ```
