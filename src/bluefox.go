@@ -10,6 +10,11 @@ import (
 	"bufio"
 )
 
+type File struct {
+	name string
+	rwx string
+}
+
 func handleError(err error) int {
 	if err != nil {
 		return 1
@@ -268,17 +273,21 @@ func main() {
 			} else {
 				listen(os.Args[2])
 			}
-		} else if len(os.Args) > 2 && strings.Compare(os.Args[1], "-c") == 0 {
-			if len(os.Args) > 3 && strings.Compare(os.Args[4], "--payload") == 0 {
-				payload := os.Args[5]
-				var ipAddr string
-				if strings.Compare(os.Args[2], "localhost") == 0 {
-					ipAddr = "127.0.0.1"
+		} else if len(os.Args) > 3 && strings.Compare(os.Args[1], "-c") == 0 {
+			if len(os.Args) > 4 {
+				if strings.Compare(os.Args[4], "--payload") == 0 {
+					payload := os.Args[5]
+					var ipAddr string
+					if strings.Compare(os.Args[2], "localhost") == 0 {
+						ipAddr = "127.0.0.1"
+					} else {
+						ipAddr = os.Args[2]
+					}
+					Port := os.Args[3]
+					connectPayload(ipAddr, Port, payload)
 				} else {
-					ipAddr = os.Args[2]
+					help()
 				}
-				Port := os.Args[3]
-				connectPayload(ipAddr, Port, payload)
 			} else {
 				var ipAddr string
 				if strings.Compare(os.Args[2], "localhost") == 0 {
@@ -290,6 +299,8 @@ func main() {
 				connect(ipAddr, Port)
 			}
 		} else if strings.Compare(os.Args[1], "-h") == 0 {
+			help()
+		} else {
 			help()
 		}
 	} else {
