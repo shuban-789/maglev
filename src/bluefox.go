@@ -10,11 +10,6 @@ import (
 	"bufio"
 )
 
-type File struct {
-	name string
-	rwx string
-}
-
 func handleError(err error) int {
 	if err != nil {
 		return 1
