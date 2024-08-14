@@ -1,13 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"net"
 	"os"
 	"os/exec"
 	"os/user"
 	"strings"
-	"bufio"
 )
 
 func handleError(err error) int {
@@ -194,6 +194,10 @@ func connectPayload(IP string, PORT string, payload string) {
 			continue
 		}
 	}
+}
+
+func ping(ADDR string) {
+	fmt.Printf("test")
 }
 
 func connect(IP string, PORT string) {
