@@ -1,13 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"net"
 	"os"
 	"os/exec"
 	"os/user"
 	"strings"
-	"bufio"
 )
 
 func handleError(err error) int {
