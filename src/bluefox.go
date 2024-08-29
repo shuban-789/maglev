@@ -223,10 +223,6 @@ func connectPayload(IP string, PORT string, payload string) {
 	}
 }
 
-func ping(ADDR string) {
-	fmt.Printf("test")
-}
-
 func connect(IP string, PORT string) {
 	conn, err := net.Dial("tcp", IP+":"+PORT)
 	if err != nil {
