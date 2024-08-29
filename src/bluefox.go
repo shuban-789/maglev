@@ -141,6 +141,32 @@ func listenShell(PORT string, SHELL string) {
 	}
 }
 
+func listenShellTLS(PORT string, SHELL string, keyfile string, certfile string) {
+	cert, err := tls.LoadX509KeyPair(certfile, keyfile)
+	if err != nil {
+		log.Fatalf("Failed to load key pair: %v", err)
+	}
+
+	config := &tls.Config{Certificates: []tls.Certificate{cert}}
+
+	ln, err := tls.Listen("tcp", ":"+PORT, config)
+	if handleError(err) == 1 {
+		fmt.Printf("🔴 [ERROR] Unable to listen on specified port: %v\n", err)
+		return
+	} else {
+		fmt.Printf("🟡 [IDLE] Listening on port %s\n", PORT)
+	}
+	for {
+		conn, err := ln.Accept()
+		if handleError(err) == 1 {
+			fmt.Printf("🔴 [ERROR] Unable to establish connection: %v\n", err)
+		} else {
+			fmt.Printf("🟢 [SUCCESS] Connection established\n")
+		}
+		go spawnShell(conn, SHELL)
+	}
+}
+
 func listen(PORT string) {
 	ln, err := net.Listen("tcp", ":"+PORT)
 	if handleError(err) == 1 {
@@ -161,7 +187,7 @@ func listen(PORT string) {
 	}
 }
 
-func listenSSL(PORT string, keyfile string, certfile string) {
+func listenTLS(PORT string, keyfile string, certfile string) {
 	cert, err := tls.LoadX509KeyPair(certfile, keyfile)
 	if err != nil {
 		log.Fatalf("Failed to load key pair: %v", err)
