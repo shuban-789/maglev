@@ -2,12 +2,12 @@ package main
 
 import (
 	"bufio"
+	"crypto/tls"
 	"fmt"
 	"net"
 	"os"
 	"os/exec"
 	"os/user"
-	"crypto/tls"
 	"strings"
 )
 
@@ -318,8 +318,15 @@ func main() {
 		if strings.Compare(os.Args[1], "-l") == 0 {
 			if len(os.Args) > 3 && strings.Compare(os.Args[3], "--shell") == 0 {
 				shell := os.Args[4]
-				listenShell(os.Args[2], shell)
+				if len(os.Args) > 4 && strings.Compare(os.Args[5], "--tls") == 0 {
+					listenShellTLS(os.Args[2], shell)
+				} else {
+					listenShell(os.Args[2], shell)
+				}
 			} else {
+				if len(os.Args) > 3 && strings.Compare(os.Args[3], "--tls") == 0 {
+					listenTLS(os.args[2])
+				}
 				listen(os.Args[2])
 			}
 		} else if len(os.Args) > 3 && strings.Compare(os.Args[1], "-c") == 0 {
