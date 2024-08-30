@@ -7,6 +7,7 @@ Options:
         -h, Shows help menu for this command
         -l, Sets up listener for a specified port
                 --shell, spawns a specified shell supporting the -c argument
+                --tls, use Transport Layer Security (TLS) protection
         -c, Connects to a device based on a specified address and port
                 --payload, spawns a specified shell supporting the -c argument
 
@@ -14,6 +15,7 @@ Format:
         ./bluefox -h
         ./bluefox -l <PORT>
         ./bluefox -l <PORT> --shell <SHELL>
+        
         ./bluefox -c <IP> <PORT>
 
 Examples:
