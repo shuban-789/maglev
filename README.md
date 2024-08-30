@@ -13,9 +13,9 @@ Options:
 
 Format:
         ./bluefox -h
-        ./bluefox -l <PORT>
+        ./bluefox -l <PORT> --tls <KEY> <CERT>
         ./bluefox -l <PORT> --shell <SHELL>
-        
+        ./bluefox -l <PORT> --shell <SHELL> --tls <KEY> <CERT>
         ./bluefox -c <IP> <PORT>
 
 Examples:
