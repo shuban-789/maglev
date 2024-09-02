@@ -1,4 +1,4 @@
-# 🚄 Usage
+# Usage 🚅
 
 ```
 Usage: ./maglev [OPTION1] [ARGUMENT1] ... [OPTIONn] [ARGUMENTn]
