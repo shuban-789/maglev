@@ -37,7 +37,7 @@ func spawnShell(conn net.Conn, shell string) {
 	}
 
 	fmt.Printf("🟢 [SUCCESS] Received connection from %v\n", ip)
-	conn.Write([]byte("🦊 Connection established!\n"))
+	conn.Write([]byte("🚅 Connection established!\n"))
 	conn.Write([]byte("⚙️ SHELL: " + shell + "\n"))
 	conn.Write([]byte("⚙️ USER: " + username + "\n"))
 	conn.Write([]byte("⚙️ HOSTNAME: " + hostname + "\n"))
@@ -101,7 +101,7 @@ func spawnComm(conn net.Conn) {
 	defer conn.Close()
 
 	fmt.Printf("🟢 [SUCCESS] Received connection from %v\n", ip)
-	conn.Write([]byte("🦊 Connection established!\n"))
+	conn.Write([]byte("🚅 Connection established!\n"))
 
 	for {
 		input := make([]byte, 1024)
