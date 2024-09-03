@@ -1,3 +1,3 @@
-module src/maglev.go
+module github.com/shuban-789/maglev
 
 go 1.22.5
