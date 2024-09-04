@@ -24,3 +24,11 @@ Examples:
         ./maglev -c 127.0.0.1 1234
         ./maglev -c 127.0.0.1 1234 --payload "ls -l"
 ```
+
+# Make
+
+`default --> build`
+```
+make
+```
+
