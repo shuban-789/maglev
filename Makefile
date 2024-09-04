@@ -1,3 +1,7 @@
+# Build Alternative: make ARCH=$GOARCH OS=$GOOS
+# (e.g.) make ARCH=arm64 OS=darwin
+# (e.g.) make ARCH=arm64 OS=linux
+
 ARCH=amd64
 OS=linux
 
