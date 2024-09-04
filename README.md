@@ -25,25 +25,7 @@ Examples:
         ./maglev -c 127.0.0.1 1234 --payload "ls -l"
 ```
 
-# Make
+# Makefile
 
-`default --> build`
 ```
-make
 ```
-
-`build`
-```
-make build
-```
-
-`run`
-```
-make run
-```
-
-`clean`
-```
-make clean
-```
-
