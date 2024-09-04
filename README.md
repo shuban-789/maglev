@@ -24,21 +24,3 @@ Examples:
         ./maglev -c 127.0.0.1 1234
         ./maglev -c 127.0.0.1 1234 --payload "ls -l"
 ```
-
-# Makefile
-
-```makefile
-ARCH=amd64
-OS=linux
-
-all: build
-
-build:
-  GOARCH=$(ARCH) GOOS=$(OS) go build -o maglev src/maglev.go
-
-run:
-  go run src/maglev.go
-
-clean:
-  rm -f maglev
-```
