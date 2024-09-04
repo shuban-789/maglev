@@ -1,8 +1,7 @@
 ARCH=amd64
 OS=linux
 
-all:
-  GOARCH=$(ARCH) GOOS=$(OS) go build -o maglev src/maglev.go
+all: build
 
 build:
   GOARCH=$(ARCH) GOOS=$(OS) go build -o maglev src/maglev.go
