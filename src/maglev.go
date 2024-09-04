@@ -319,13 +319,13 @@ func main() {
 			if len(os.Args) > 3 && strings.Compare(os.Args[3], "--shell") == 0 {
 				shell := os.Args[4]
 				if len(os.Args) > 4 && strings.Compare(os.Args[5], "--tls") == 0 {
-					listenShellTLS(os.Args[2], shell)
+					listenShellTLS(os.Args[2], shell, os.args[6], os.args[7])
 				} else {
 					listenShell(os.Args[2], shell)
 				}
 			} else {
 				if len(os.Args) > 3 && strings.Compare(os.Args[3], "--tls") == 0 {
-					listenTLS(os.args[2])
+					listenTLS(os.args[2], os.args[4], os.args[5])
 				}
 				listen(os.Args[2])
 			}
