@@ -1,5 +1,3 @@
-# Build Alternative (If go env is setup): make ARCH=$GOARCH OS=$GOOS
-
 ARCH=amd64
 OS=linux
 
