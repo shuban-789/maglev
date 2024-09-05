@@ -1,10 +1,11 @@
-# Build Alternative: make ARCH=$GOARCH OS=$GOOS
-# (e.g.) make ARCH=arm64 OS=darwin
-# (e.g.) make ARCH=amd64 OS=linux
-# (e.g.) make ARCH=arm64 OS=linux
-# (e.g.) make ARCH=amd64 OS=linux
-# (e.g.) make ARCH=i386 OS=windows
-# (e.g.) make ARCH=amd64 OS=windows
+# Build Alternatives: 
+# make ARCH=$GOARCH OS=$GOOS
+# make ARCH=arm64 OS=darwin
+# make ARCH=amd64 OS=darwin
+# make ARCH=arm64 OS=linux
+# make ARCH=amd64 OS=linux
+# make ARCH=i386 OS=windows
+# make ARCH=amd64 OS=windows
 
 ARCH=amd64
 OS=linux
