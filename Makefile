@@ -1,11 +1,4 @@
-# Build Alternatives: 
-# make ARCH=$GOARCH OS=$GOOS
-# make ARCH=arm64 OS=darwin
-# make ARCH=amd64 OS=darwin
-# make ARCH=arm64 OS=linux
-# make ARCH=amd64 OS=linux
-# make ARCH=i386 OS=windows
-# make ARCH=amd64 OS=windows
+# Build Alternative (If go env is setup): make ARCH=$GOARCH OS=$GOOS
 
 ARCH=amd64
 OS=linux
