@@ -4,7 +4,7 @@ OS=linux
 all: build
 
 build:
-  @echo "Converting src/maglev.go --> maglev (ELF)"
+  @echo "Compiling src/maglev.go into ./maglev..."
   GOARCH=$(ARCH) GOOS=$(OS) go build -o maglev src/maglev.go
 
 run:
@@ -12,5 +12,5 @@ run:
   go run src/maglev.go
 
 clean:
-  @echo "Removing maglev (ELF)..."
+  @echo "Removing ./maglev..."
   rm -f maglev
