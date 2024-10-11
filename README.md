@@ -1,4 +1,5 @@
 # Usage
+[![Go Report Card](https://goreportcard.com/badge/github.com/shuban-789/maglev)](https://goreportcard.com/report/github.com/shuban-789/maglev)
 
 ```
 Usage: ./maglev [OPTION1] [ARGUMENT1] ... [OPTIONn] [ARGUMENTn]
