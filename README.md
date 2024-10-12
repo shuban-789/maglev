@@ -1,5 +1,7 @@
 # Maglev [![Go Report Card](https://goreportcard.com/badge/github.com/shuban-789/maglev)](https://goreportcard.com/report/github.com/shuban-789/maglev)
 
+Maglev (`maglev`) is a versatile remote connection Swiss Army Knife programmed using Go. Maglev can currently successfully act as a client and a listener, accept the transfer of commands as payload, and support TLS connections. This project is still in development for more features.
+
 # Usage
 ```
 Usage: ./maglev [OPTION1] [ARGUMENT1] ... [OPTIONn] [ARGUMENTn]
