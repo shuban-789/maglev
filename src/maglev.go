@@ -328,7 +328,7 @@ func main() {
 				}
 			} else {
 				if len(os.Args) > 3 && strings.Compare(os.Args[3], "--tls") == 0 {
-					listenTLS(os.args[2], os.args[4], os.args[5])
+					listenTLS(os.Args[2], os.Args[4], os.Args[5])
 				}
 				listen(os.Args[2])
 			}
