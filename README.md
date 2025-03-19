@@ -23,7 +23,7 @@ Format:
 
 Examples:
         ./maglev -l 1234
-        ./maglev -l 1234 --shell /usr/bin/python3
+        ./maglev -l 1234 --shell /usr/bin/bash
         ./maglev -c 127.0.0.1 1234
         ./maglev -c 127.0.0.1 1234 --payload "whoami"
 ```
