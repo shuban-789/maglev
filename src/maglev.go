@@ -283,7 +283,7 @@ func connect(IP string, PORT string) {
 
 		input = strings.TrimSpace(input)
 		if input == "exit" {
-			fmt.Printf("🟢 [SUCCESS] Client has disconnected")
+			fmt.Printf("🟢 [SUCCESS] Client has disconnected\n")
 			return
 		}
 
