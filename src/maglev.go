@@ -296,7 +296,7 @@ func connect(IP string, PORT string) {
 }
 
 func help() {
-	fmt.Printf("Usage: ./bluefox [OPTION1] [ARGUMENT1] ... [OPTIONn] [ARGUMENTn]\n")
+	fmt.Printf("Usage: ./maglev [OPTION1] [ARGUMENT1] ... [OPTIONn] [ARGUMENTn]\n")
 	fmt.Printf("\nOptions:\n")
 	fmt.Printf("	-h, Shows help menu for this command\n")
 	fmt.Printf("	-l, Sets up listener for a specified port\n")
@@ -304,16 +304,16 @@ func help() {
 	fmt.Printf("	-c, Connects to a device based on a specified address and port\n")
 	fmt.Printf("		--payload, spawns a specified shell supporting the -c argument\n")
 	fmt.Printf("\nFormat:\n")
-	fmt.Printf("	./bluefox -h\n")
-	fmt.Printf("	./bluefox -l <PORT>\n")
+	fmt.Printf("	./maglev -h\n")
+	fmt.Printf("	./maglev -l <PORT>\n")
 	fmt.Printf("	./maglev -l <PORT> --tls <KEY> <CERT>\n")
-	fmt.Printf("	./bluefox -l <PORT> --shell <SHELL>\n")
+	fmt.Printf("	./maglev -l <PORT> --shell <SHELL>\n")
 	fmt.Printf("	./maglev -l <PORT> --shell <SHELL> --tls <KEY> <CERT>\n")
-	fmt.Printf("	./bluefox -c <IP> <PORT>\n")
+	fmt.Printf("	./maglev -c <IP> <PORT>\n")
 	fmt.Printf("\nExamples:\n")
-	fmt.Printf("	./bluefox -l 1234\n")
-	fmt.Printf("	./bluefox -l 1234 --shell /usr/bin/python3\n")
-	fmt.Printf("	./bluefox -c 127.0.0.1 1234\n")
+	fmt.Printf("	./maglev -l 1234\n")
+	fmt.Printf("	./maglev -l 1234 --shell /usr/bin/python3\n")
+	fmt.Printf("	./maglev -c 127.0.0.1 1234\n")
 }
 
 func main() {
@@ -321,7 +321,7 @@ func main() {
 		if strings.Compare(os.Args[1], "-l") == 0 {
 			if len(os.Args) > 3 && strings.Compare(os.Args[3], "--shell") == 0 {
 				shell := os.Args[4]
-				if len(os.Args) > 4 && strings.Compare(os.Args[5], "--tls") == 0 {
+				if len(os.Args) > 4 && strings.Compare(os.Args[4], "--tls") == 0 {
 					listenShellTLS(os.Args[2], shell, os.Args[6], os.Args[7])
 				} else {
 					listenShell(os.Args[2], shell)
