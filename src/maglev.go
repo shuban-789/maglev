@@ -312,7 +312,7 @@ func help() {
 	fmt.Printf("	./maglev -c <IP> <PORT>\n")
 	fmt.Printf("\nExamples:\n")
 	fmt.Printf("	./maglev -l 1234\n")
-	fmt.Printf("	./maglev -l 1234 --shell /usr/bin/python3\n")
+	fmt.Printf("	./maglev -l 1234 --shell /bin/bash\n")
 	fmt.Printf("	./maglev -c 127.0.0.1 1234\n")
 }
 
